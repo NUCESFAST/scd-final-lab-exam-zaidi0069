@@ -18,19 +18,19 @@ pipeline {
                 // Install dependencies for each microservice
                 script {
                     dir('Auth') {
-                        sh 'npm install'
+                        bat 'npm install'
                     }
                     dir('Classrooms') {
-                        sh 'npm install'
+                        bat 'npm install'
                     }
                     dir('event-bus') {
-                        sh 'npm install'
+                        bat 'npm install'
                     }
                     dir('Post') {
-                        sh 'npm install'
+                        bat 'npm install'
                     }
                     dir('client') {
-                        sh 'npm install'
+                        bat 'npm install'
                     }
                 }
             }
@@ -43,48 +43,48 @@ pipeline {
                     def dockerImageTag = "${env.BUILD_NUMBER}" // Use build number as image tag
                     
                     dir('Auth') {
-                        sh "docker build -t ${DOCKER_HUB_USERNAME}/Auth:${dockerImageTag} ."
+                        bat "docker build -t ${DOCKER_HUB_USERNAME}/Auth:${dockerImageTag} ."
                     }
                     dir('Classroom') {
-                        sh "docker build -t ${DOCKER_HUB_USERNAME}/Classrooms:${dockerImageTag} ."
+                        bat "docker build -t ${DOCKER_HUB_USERNAME}/Classrooms:${dockerImageTag} ."
                     }
                     dir('event-bus') {
-                        sh "docker build -t ${DOCKER_HUB_USERNAME}/event-bus:${dockerImageTag} ."
+                        bat "docker build -t ${DOCKER_HUB_USERNAME}/event-bus:${dockerImageTag} ."
                     }
                     dir('Post') {
-                        sh "docker build -t ${DOCKER_HUB_USERNAME}/Post:${dockerImageTag} ."
+                        bat "docker build -t ${DOCKER_HUB_USERNAME}/Post:${dockerImageTag} ."
                     }
                     dir('client') {
-                        sh "docker build -t ${DOCKER_HUB_USERNAME}/client:${dockerImageTag} ./client"
+                        bat "docker build -t ${DOCKER_HUB_USERNAME}/client:${dockerImageTag} ./client"
                     }
                 }
             }
         }
 
-        stage('Push Docker Images') {
+        stage('Pubat Docker Images') {
             steps {
-                // Push Docker images to Docker Hub
+                // Pubat Docker images to Docker Hub
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         dir('Auth') {
-                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_HUB_USERNAME}/Auth:${dockerImageTag}"
+                            bat "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            bat "docker pubat ${DOCKER_HUB_USERNAME}/Auth:${dockerImageTag}"
                         }
                         dir('Classroom') {
-                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_HUB_USERNAME}/Classrooms:${dockerImageTag}"
+                            bat "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            bat "docker pubat ${DOCKER_HUB_USERNAME}/Classrooms:${dockerImageTag}"
                         }
                         dir('event-bus') {
-                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_HUB_USERNAME}/event-bus:${dockerImageTag}"
+                            bat "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            bat "docker pubat ${DOCKER_HUB_USERNAME}/event-bus:${dockerImageTag}"
                         }
                         dir('Post') {
-                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_HUB_USERNAME}/Post:${dockerImageTag}"
+                            bat "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            bat "docker pubat ${DOCKER_HUB_USERNAME}/Post:${dockerImageTag}"
                         }
                         dir('client') {
-                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_HUB_USERNAME}/client:${dockerImageTag}"
+                            bat "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            bat "docker pubat ${DOCKER_HUB_USERNAME}/client:${dockerImageTag}"
                         }
                     }
                 }
