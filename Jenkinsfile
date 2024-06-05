@@ -17,16 +17,16 @@ pipeline {
             steps {
                 // Install dependencies for each microservice
                 script {
-                    dir('auth') {
+                    dir('Auth') {
                         sh 'npm install'
                     }
-                    dir('classrooms') {
+                    dir('Classrooms') {
                         sh 'npm install'
                     }
                     dir('event-bus') {
                         sh 'npm install'
                     }
-                    dir('posts') {
+                    dir('Post') {
                         sh 'npm install'
                     }
                     dir('client') {
@@ -42,17 +42,17 @@ pipeline {
                 script {
                     def dockerImageTag = "${env.BUILD_NUMBER}" // Use build number as image tag
                     
-                    dir('auth') {
-                        sh "docker build -t ${DOCKER_HUB_USERNAME}/auth:${dockerImageTag} ."
+                    dir('Auth') {
+                        sh "docker build -t ${DOCKER_HUB_USERNAME}/Auth:${dockerImageTag} ."
                     }
-                    dir('classrooms') {
-                        sh "docker build -t ${DOCKER_HUB_USERNAME}/classrooms:${dockerImageTag} ."
+                    dir('Classroom') {
+                        sh "docker build -t ${DOCKER_HUB_USERNAME}/Classrooms:${dockerImageTag} ."
                     }
                     dir('event-bus') {
                         sh "docker build -t ${DOCKER_HUB_USERNAME}/event-bus:${dockerImageTag} ."
                     }
-                    dir('posts') {
-                        sh "docker build -t ${DOCKER_HUB_USERNAME}/posts:${dockerImageTag} ."
+                    dir('Post') {
+                        sh "docker build -t ${DOCKER_HUB_USERNAME}/Post:${dockerImageTag} ."
                     }
                     dir('client') {
                         sh "docker build -t ${DOCKER_HUB_USERNAME}/client:${dockerImageTag} ./client"
@@ -66,21 +66,21 @@ pipeline {
                 // Push Docker images to Docker Hub
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        dir('auth') {
+                        dir('Auth') {
                             sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_HUB_USERNAME}/auth:${dockerImageTag}"
+                            sh "docker push ${DOCKER_HUB_USERNAME}/Auth:${dockerImageTag}"
                         }
-                        dir('classrooms') {
+                        dir('Classroom') {
                             sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_HUB_USERNAME}/classrooms:${dockerImageTag}"
+                            sh "docker push ${DOCKER_HUB_USERNAME}/Classrooms:${dockerImageTag}"
                         }
                         dir('event-bus') {
                             sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                             sh "docker push ${DOCKER_HUB_USERNAME}/event-bus:${dockerImageTag}"
                         }
-                        dir('posts') {
+                        dir('Post') {
                             sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_HUB_USERNAME}/posts:${dockerImageTag}"
+                            sh "docker push ${DOCKER_HUB_USERNAME}/Post:${dockerImageTag}"
                         }
                         dir('client') {
                             sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
